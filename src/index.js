@@ -9,14 +9,14 @@ import {
   compose,
   legacy_createStore as createStore,
 } from 'redux';
+import thunk from 'redux-thunk';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const composeEnhancers = compose(
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  applyMiddleware(logger)
-);
+const composeAlt = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const composeEnhancers = composeAlt(applyMiddleware(thunk, logger));
 
 const store = createStore(pokemonsReducer, composeEnhancers);
 
