@@ -16,9 +16,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const composeAlt = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const composeEnhancers = composeAlt(applyMiddleware(thunk, logger));
+const composedEnhancers = composeAlt(applyMiddleware(thunk, logger));
 
-const store = createStore(pokemonsReducer, composeEnhancers);
+const store = createStore(pokemonsReducer, composedEnhancers);
 
 root.render(
   <React.StrictMode>
