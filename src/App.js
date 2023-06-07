@@ -5,16 +5,29 @@ import { Searcher } from './components/Searcher';
 import { PokemonList } from './components/PokemonList';
 import logo from './static/logo.svg';
 import './App.css';
-import { fetchPokemonsWithDetails } from './slices/dataSlice';
+import {
+  fetchFilteredPokemons,
+  fetchPokemonsWithDetails,
+} from './slices/dataSlice';
 
 function App() {
   const pokemons = useSelector((state) => state.data.pokemons, shallowEqual);
+  const filteredPokemons = useSelector(
+    (state) => state.data.filteredPokemons,
+    shallowEqual
+  );
   const loading = useSelector((state) => state.ui.loading);
+  const searchPokemonsText = useSelector(
+    (state) => state.data.searchPokemonsText
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemonsWithDetails());
-  }, []);
+    if (!searchPokemonsText.length && !pokemons.length) {
+      dispatch(fetchPokemonsWithDetails());
+    }
+    dispatch(fetchFilteredPokemons())
+  }, [searchPokemonsText]);
 
   return (
     <div className='App'>
@@ -41,7 +54,9 @@ function App() {
           />
         </Col>
       ) : (
-        <PokemonList pokemons={pokemons} />
+        <PokemonList
+          pokemons={searchPokemonsText.length ? filteredPokemons : pokemons}
+        />
       )}
     </div>
   );
